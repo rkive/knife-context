@@ -1,4 +1,4 @@
-## KCM - Knive Context Manager
+## knife-context
 ## Knife plugin to manage your knife.rb and credentials for multiple Chef Servers.
 
 require 'chef/knife'
@@ -19,16 +19,16 @@ knife context quiet"
     def run
 
       # Startup:
-      # Check for ~/.kcm/contexts directory, create it if neccessary
+      # Check for ~/.chef/contexts directory, create it if neccessary
       @my_home="#{ENV['HOME']}"
-      if !File.directory?("#{@my_home}/.kcm/") then 
-        Dir.mkdir("#{@my_home}/.kcm/")
-        ui.warn "#{@my_home}/.kcm/ Wasn't found, so we created it."
+      if !File.directory?("#{@my_home}/.chef/") then
+        Dir.mkdir("#{@my_home}/.chef/")
+        ui.warn "#{@my_home}/.chef/ Wasn't found, so we created it."
       end
 
-      if !File.directory?("#{@my_home}/.kcm/contexts") then
-        Dir.mkdir("#{@my_home}/.kcm/contexts")
-        ui.warn "#{@my_home}/.kcm/contexts Wasn't found, so we created it."
+      if !File.directory?("#{@my_home}/chef/contexts") then
+        Dir.mkdir("#{@my_home}/.chef/contexts")
+        ui.warn "#{@my_home}/.chef/contexts Wasn't found, so we created it."
       end
 
       if @name_args[0].nil? then
@@ -51,9 +51,9 @@ knife context quiet"
       when "delete"
         ui.warn "PLACEHOLDER - We will delete the named context"
       when "disable"
-        ui.warn "PLACEHOLDER - We will disable kcm"
+        ui.warn "PLACEHOLDER - We will disable knife-context"
       when "enable"
-        ui.warn "PLACEHOLDER - We will enable kcm"
+        ui.warn "PLACEHOLDER - We will enable knife-context"
       when "verbose"
         ui.warn "PLACEHOLDER - We will print the context before running any knife commands"
       when "quiet"
@@ -64,14 +64,14 @@ knife context quiet"
 
     def context_list
       ui.msg "\nAvailible Contexts:"
-      Dir.entries("#{@my_home}/.kcm/contexts").each do |dir|
+      Dir.entries("#{@my_home}/.chef/contexts").each do |dir|
         ("#{dir}" == "." || "#{dir}" == "..") ? nil : ui.msg("#{dir}")
       end
     end
 
     def context_show
-      if File.exists?("#{@my_home}/.kcm/configured_context") then
-        current_context=File.readlink("#{@my_home}/.kcm/configured_context")
+      if File.exists?("#{@my_home}/.chef/configured_context") then
+        current_context=File.readlink("#{@my_home}/.chef/configured_context")
         basename=File.basename(current_context)
         ui.msg "Current Knife Context is: #{basename}"
       else
@@ -85,13 +85,13 @@ knife context quiet"
         exit 1
       end
       
-      context_status_file="#{@my_home}/.kcm/contexts/#{@new_context}"
-      context_status_link="#{@my_home}/.kcm/configured_context"
+      context_status_file="#{@my_home}/.chef/contexts/#{@new_context}"
+      context_status_link="#{@my_home}/.chef/configured_context"
       
-      context_config_file="#{@my_home}/.kcm/contexts/#{@new_context}/knife.rb"
+      context_config_file="#{@my_home}/.chef/contexts/#{@new_context}/knife.rb"
       context_config_link="#{@my_home}/.chef/knife.rb"
       
-      context_pem_file="#{@my_home}/.kcm/contexts/#{@new_context}/client.pem"
+      context_pem_file="#{@my_home}/.chef/contexts/#{@new_context}/client.pem"
       context_pem_link="#{@my_home}/.chef/client.pem"
       
       contexts = [
@@ -113,7 +113,7 @@ knife context quiet"
     
     def context_create
       ui.msg "\nAvailible Contexts:"
-      Dir.entries("#{@my_home}/.kcm/contexts").each do |dir|
+      Dir.entries("#{@my_home}/.chef/contexts").each do |dir|
         ("#{dir}" == "." || "#{dir}" == "..") ? nil : ui.msg("#{dir}")
       end
     end
